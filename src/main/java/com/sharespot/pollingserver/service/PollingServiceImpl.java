@@ -1,13 +1,15 @@
 package com.sharespot.pollingserver.service;
 
+import com.sharespot.pollingserver.model.Question;
 import com.sharespot.pollingserver.model.Survey;
-import com.sharespot.pollingserver.payload.ApiResponse;
+import com.sharespot.pollingserver.payload.QuestionRequest;
 import com.sharespot.pollingserver.payload.SurveyRequest;
 import com.sharespot.pollingserver.repository.QuestionRepository;
 import com.sharespot.pollingserver.repository.SurveyRepository;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,23 +25,25 @@ public class PollingServiceImpl implements PollingService {
   QuestionRepository questionRepository;
 
   @Override
-  public ApiResponse deleteSurvey(Long id) {
+  public int deleteSurvey(Long id) {
     if (!surveyRepository.existsById(id)) {
-      return new ApiResponse(false, "The survey is not found!");
+      return 0;
     }
     surveyRepository.deleteById(id);
-    return new ApiResponse(true, "The survey was deleted successfully!");
+    return 1;
   }
 
   @Override
-  public ApiResponse updateSurvey(Survey survey) {
-    survey.setQuestions(questionRepository.saveAll(survey.getQuestions()));
+  public int updateSurvey(Survey survey) {
+    if (!surveyRepository.existsById(survey.getId())) {
+      return 0;
+    }
     surveyRepository.save(survey);
-    return new ApiResponse(true, "The survey was updated successfully!");
+    return 1;
   }
 
   @Override
-  public ApiResponse createSurvey(SurveyRequest surveyRequest) {
+  public int createSurvey(SurveyRequest surveyRequest) {
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     Survey survey = new Survey();
     survey.setTitle(surveyRequest.getTitle());
@@ -49,30 +53,35 @@ public class PollingServiceImpl implements PollingService {
     } catch (ParseException e) {
       e.printStackTrace();
     }
-    survey.setIsActive(surveyRequest.getActive());
-    survey.setQuestions(questionRepository.saveAll(surveyRequest.getQuestions()));
+    survey.setIsActive(surveyRequest.getIsActive());
+    ArrayList<Question> questions = new ArrayList<>();
+    for (QuestionRequest question :
+        surveyRequest.getQuestions()) {
+      questions.add(new Question(question.getTitle(), question.getDisplayOrder()));
+    }
+    survey.setQuestions(questions);
     surveyRepository.save(survey);
-    return new ApiResponse(true, "The survey was created successfully!");
+    return 1;
   }
 
   @Override
-  public List<Survey> getAllSurvey(String sort) {
-    if (sort.equals("date")) {
+  public List<Survey> getAllSurvey(int sort) {
+    if (sort == 0) {
       return surveyRepository.findAllByOrderByStartDate();
     }
     return surveyRepository.findAllByOrderByTitle();
   }
 
   @Override
-  public List<Survey> getAllSurveyByTitle(String title, String sort) {
-    if (sort.equals("date")) {
+  public List<Survey> getAllSurveyByTitle(String title, int sort) {
+    if (sort == 0) {
       return surveyRepository.findAllByTitleOrderByStartDate(title);
     }
     return surveyRepository.findAllByTitleOrderByTitle(title);
   }
 
   @Override
-  public List<Survey> getAllSurveyByDate(String date, String sort) {
+  public List<Survey> getAllSurveyByDate(String date, int sort) {
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     Date dateTime = new Date();
     try {
@@ -80,7 +89,7 @@ public class PollingServiceImpl implements PollingService {
     } catch (ParseException e) {
       e.printStackTrace();
     }
-    if (sort.equals("date")) {
+    if (sort == 0) {
       return surveyRepository.findAllByEndDateGreaterThanAndStartDateLessThanOrderByStartDate(
           new Timestamp(dateTime.getTime()), new Timestamp(dateTime.getTime()));
     }
@@ -89,8 +98,8 @@ public class PollingServiceImpl implements PollingService {
   }
 
   @Override
-  public List<Survey> getAllSurveyByActive(Boolean active, String sort) {
-    if (sort.equals("date")) {
+  public List<Survey> getAllSurveyByActive(Boolean active, int sort) {
+    if (sort == 0) {
       return surveyRepository.findAllByIsActiveOrderByStartDate(active);
     }
     return surveyRepository.findAllByIsActiveOrderByTitle(active);

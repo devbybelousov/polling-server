@@ -3,22 +3,21 @@ package com.sharespot.pollingserver.service;
 import com.sharespot.pollingserver.model.Survey;
 import com.sharespot.pollingserver.payload.ApiResponse;
 import com.sharespot.pollingserver.payload.SurveyRequest;
-import java.sql.Timestamp;
 import java.util.List;
 
 public interface PollingService {
 
-  ApiResponse deleteSurvey(Long id);
+  int deleteSurvey(Long id);
 
-  ApiResponse updateSurvey(Survey survey);
+  int updateSurvey(Survey survey);
 
-  ApiResponse createSurvey(SurveyRequest surveyRequest);
+  int createSurvey(SurveyRequest surveyRequest);
 
-  List<Survey> getAllSurvey(String sort);
+  List<Survey> getAllSurvey(int sort);
 
-  List<Survey> getAllSurveyByTitle(String title, String sort);
+  List<Survey> getAllSurveyByTitle(String title, int sort);
 
-  List<Survey> getAllSurveyByDate(String date, String sort);
+  List<Survey> getAllSurveyByDate(String date, int sort);
 
-  List<Survey> getAllSurveyByActive(Boolean active, String sort);
+  List<Survey> getAllSurveyByActive(Boolean active, int sort);
 }

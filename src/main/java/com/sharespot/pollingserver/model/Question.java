@@ -1,6 +1,5 @@
 package com.sharespot.pollingserver.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,7 +19,6 @@ public class Question {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @JsonIgnore
   @Column(name = "question_id")
   private Long id;
 
@@ -30,4 +28,9 @@ public class Question {
   @Column(name = "display_order")
   private int displayOrder;
 
+
+  public Question(String question, int displayOrder) {
+    this.question = question;
+    this.displayOrder = displayOrder;
+  }
 }
