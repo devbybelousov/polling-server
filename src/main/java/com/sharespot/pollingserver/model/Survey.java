@@ -34,10 +34,10 @@ public class Survey {
   private Timestamp startDate;
 
   @Column(name = "end_time")
-  private Timestamp end_date;
+  private Timestamp endDate;
 
   @Column(name = "activity")
-  private boolean isActive;
+  private Boolean isActive;
 
   @OneToMany(cascade = CascadeType.ALL)
   @JoinColumn(name = "survey_id")
