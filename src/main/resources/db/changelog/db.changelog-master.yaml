@@ -48,7 +48,7 @@ databaseChangeLog:
                   name: survey_id
                   type: BIGINT
                   constraints:
-                    nullable: false
+                    nullable: true
               - column:
                   name: text_of_question
                   type: varchar(200)

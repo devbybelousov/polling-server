@@ -1,7 +1,9 @@
 package com.sharespot.pollingserver.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 import java.sql.Timestamp;
-import java.util.Set;
+import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,17 +25,19 @@ import lombok.NoArgsConstructor;
 public class Survey {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "survey_id")
   private Long id;
 
   @Column(name = "title")
   private String title;
 
+  @JsonFormat(pattern = "yyyy-MM-dd", shape = Shape.STRING)
   @Column(name = "start_date")
   private Timestamp startDate;
 
-  @Column(name = "end_time")
+  @JsonFormat(pattern = "yyyy-MM-dd", shape = Shape.STRING)
+  @Column(name = "end_date")
   private Timestamp endDate;
 
   @Column(name = "activity")
@@ -41,5 +45,5 @@ public class Survey {
 
   @OneToMany(cascade = CascadeType.ALL)
   @JoinColumn(name = "survey_id")
-  private Set<Question> questions;
+  private List<Question> questions;
 }

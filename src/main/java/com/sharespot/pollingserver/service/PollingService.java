@@ -1,60 +1,24 @@
 package com.sharespot.pollingserver.service;
 
 import com.sharespot.pollingserver.model.Survey;
+import com.sharespot.pollingserver.payload.ApiResponse;
 import com.sharespot.pollingserver.payload.SurveyRequest;
-import com.sharespot.pollingserver.repository.QuestionRepository;
-import com.sharespot.pollingserver.repository.SurveyRepository;
 import java.sql.Timestamp;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-@Service
-public class PollingService {
+public interface PollingService {
 
-  @Autowired
-  SurveyRepository surveyRepository;
+  ApiResponse deleteSurvey(Long id);
 
-  @Autowired
-  QuestionRepository questionRepository;
+  ApiResponse updateSurvey(Survey survey);
 
-  public void deleteSurvey(Long id) {
-    surveyRepository.deleteById(id);
-  }
+  ApiResponse createSurvey(SurveyRequest surveyRequest);
 
-  public void updateSurvey(SurveyRequest surveyRequest) {
+  List<Survey> getAllSurvey(String sort);
 
-  }
+  List<Survey> getAllSurveyByTitle(String title, String sort);
 
-  public void createSurvey(SurveyRequest surveyRequest) {
+  List<Survey> getAllSurveyByDate(String date, String sort);
 
-  }
-
-  public List<Survey> getAllSurvey(String sort) {
-    if (sort.equals("date")) {
-      return surveyRepository.findAllByOrderByStartDate();
-    }
-    return surveyRepository.findAllByOrderByTitle();
-  }
-
-  public List<Survey> getAllSurveyByTitle(String title, String sort) {
-    if (sort.equals("date")) {
-      return surveyRepository.findAllByTitleOrderByStartDate(title);
-    }
-    return surveyRepository.findAllByTitleOrderByTitle(title);
-  }
-
-  public List<Survey> getAllSurveyByDate(Timestamp date, String sort) {
-    if (sort.equals("date")) {
-      return surveyRepository.findAllByEndDateGreaterThanAndStartDateLessThanOrderByStartDate(date, date);
-    }
-    return surveyRepository.findAllByEndDateGreaterThanAndStartDateLessThanOrderByTitle(date, date);
-  }
-
-  public List<Survey> getAllSurveyByActive(Boolean active, String sort) {
-    if (sort.equals("date")) {
-      return surveyRepository.findAllByIsActiveOrderByStartDate(active);
-    }
-    return surveyRepository.findAllByIsActiveOrderByTitle(active);
-  }
+  List<Survey> getAllSurveyByActive(Boolean active, String sort);
 }

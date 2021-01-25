@@ -1,5 +1,6 @@
 package com.sharespot.pollingserver.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,13 +17,15 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "question_of_survey")
 public class Question {
+
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @JsonIgnore
   @Column(name = "question_id")
   private Long id;
 
   @Column(name = "text_of_question")
-  private String title;
+  private String question;
 
   @Column(name = "display_order")
   private int displayOrder;
