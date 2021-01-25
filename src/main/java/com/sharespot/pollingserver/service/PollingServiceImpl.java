@@ -66,7 +66,7 @@ public class PollingServiceImpl implements PollingService {
 
   @Override
   public List<Survey> getAllSurvey(int sort) {
-    if (sort == 0) {
+    if (sort == 1) {
       return surveyRepository.findAllByOrderByStartDate();
     }
     return surveyRepository.findAllByOrderByTitle();
@@ -74,7 +74,7 @@ public class PollingServiceImpl implements PollingService {
 
   @Override
   public List<Survey> getAllSurveyByTitle(String title, int sort) {
-    if (sort == 0) {
+    if (sort == 1) {
       return surveyRepository.findAllByTitleOrderByStartDate(title);
     }
     return surveyRepository.findAllByTitleOrderByTitle(title);
@@ -89,7 +89,7 @@ public class PollingServiceImpl implements PollingService {
     } catch (ParseException e) {
       e.printStackTrace();
     }
-    if (sort == 0) {
+    if (sort == 1) {
       return surveyRepository.findAllByEndDateGreaterThanAndStartDateLessThanOrderByStartDate(
           new Timestamp(dateTime.getTime()), new Timestamp(dateTime.getTime()));
     }
@@ -99,7 +99,7 @@ public class PollingServiceImpl implements PollingService {
 
   @Override
   public List<Survey> getAllSurveyByActive(Boolean active, int sort) {
-    if (sort == 0) {
+    if (sort == 1) {
       return surveyRepository.findAllByIsActiveOrderByStartDate(active);
     }
     return surveyRepository.findAllByIsActiveOrderByTitle(active);
