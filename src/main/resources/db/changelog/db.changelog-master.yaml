@@ -1,0 +1,61 @@
+databaseChangeLog:
+  - logicalFilePath: db/changelog/db.changelog-polling.yaml
+  - changeSet:
+      id: 1
+      author: devbybelousov
+      changes:
+        - createTable:
+            tableName: survey
+            columns:
+              - column:
+                  name: survey_id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: title
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: start_date
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: end_date
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: activity
+                  type: boolean
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: question_of_survey
+            columns:
+              - column:
+                  name: question_id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: survey_id
+                  type: BIGINT
+                  constraints:
+                    nullable: true
+              - column:
+                  name: text_of_question
+                  type: varchar(200)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: display_order
+                  type: INT
+                  constraints:
+                    nullable: false
